@@ -34,7 +34,7 @@ namespace Courses.Helpers
         public static bool ImaPristup(this HttpContext context, params Uloga[] uloge)
         {
             if (uloge == null || !uloge.Any())
-                return false;
+                return false; 
 
             var logiraniKorisnik = context.Session.GetObject<Korisnik>(Konfiguracija.KljucLogiranogKorisnika);
             if (logiraniKorisnik == null)
