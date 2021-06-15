@@ -1,0 +1,76 @@
+﻿@model ObavijestiDodavanjeIzmjenaViewModel
+
+@{
+    if (Model.Obavijest.Id == 0)
+    {
+        ViewData["Title"] = "Dodavanje obavijesti";
+    }
+    else
+    {
+        ViewData["Title"] = "Izmjena obavijesti";
+    }
+
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Obavijesti;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Obavijesti" asp-action="Snimi" enctype="multipart/form-data">
+    <input asp-for="Obavijest.Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Obavijest.NaslovnaFotografija">Naslovna fotografija</label>
+        <input asp-for="Obavijest.NaslovnaFotografija" type="file" accept="image/*" class="form-control">
+    </div>
+    @if (Context.ImaPristup(Uloga.Edukator))
+    {
+        <div class="form-group">
+            <label asp-for="Obavijest.KursId">Kurs</label>
+            <select asp-for="Obavijest.KursId" asp-items="@(new SelectList(Model.Kursevi, nameof(Kurs.Id), nameof(Kurs.Naziv)))" class="form-control"></select>
+        </div>
+    }
+    else if(Context.ImaPristup(Uloga.Administrator) && Model.Obavijest.Id != 0)
+    {
+        <div class="form-group">
+            <label asp-for="Obavijest.KursId">Kurs</label>
+            <input type="text" value="@Model.Obavijest.Kurs.Naziv" class="form-control" readonly disabled />      
+        </div>
+    }
+    <div class="form-group">
+        <label asp-for="Obavijest.Naziv">Naziv</label>
+        <input asp-for="Obavijest.Naziv" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Obavijest.KratakOpis">Kratak opis</label>
+        <textarea asp-for="Obavijest.KratakOpis" class="form-control" rows="7"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Obavijest.Opis">Opis</label>
+        <textarea asp-for="Obavijest.Opis" class="form-control" rows="15"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Obavijest.TipObavijestiId">Tip obavijesti</label>
+        <select asp-for="Obavijest.TipObavijestiId" asp-items="@(new SelectList(Model.TipoviObavijesti, nameof(TipObavijesti.Id), nameof(TipObavijesti.Naziv)))" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Obavijest.Dodatak">Dodatak</label>
+        <input asp-for="Obavijest.Dodatak" type="file" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

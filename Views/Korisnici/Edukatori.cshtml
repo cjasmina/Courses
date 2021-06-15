@@ -1,0 +1,85 @@
+﻿@model IPagedList<Korisnik>
+
+@{
+    ViewData["Title"] = "Edukatori";
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Edukatori;
+}
+
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Korisnici" asp-action="DodavanjeEdukatora" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema edukatora za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Fotografija
+                </th>
+                <th>
+                    Ime
+                </th>
+                <th>
+                    Prezime
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Grad
+                </th>
+                <th class="text-right">
+                    @Resource.Akcija
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var korisnik in Model)
+            {
+            <tr>
+                <td>
+                    @if (korisnik.ProfilnaFotografija != null)
+                    {
+                        <img src="@SlikaBase64.Prikaz(korisnik.ProfilnaFotografija)" height="60" />
+                    }
+                </td>
+                <td>@korisnik.Ime</td>
+                <td>@korisnik.Prezime</td>
+                <td>@korisnik.Email</td>
+                <td>@korisnik.Grad.Naziv</td>
+
+                <td class="text-right">
+
+                    <a asp-controller="Korisnici" asp-action="IzmjenaEdukatora" asp-route-id="@korisnik.Id" class="btn btn-info btn-sm">Izmijeni</a>
+                    <a asp-controller="Korisnici" asp-action="IzbrisiEdukatora" asp-route-id="@korisnik.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("Edukatori", new { page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination", "justify-content-center", "mb-0" }
+        }
+    )
+}

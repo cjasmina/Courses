@@ -1,0 +1,74 @@
+﻿@model IPagedList<Kurs>
+
+@{
+    ViewData["Title"] = Resource.Kursevi;
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Kursevi;
+}
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Kursevi" asp-action="Dodavanje" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema kurseva za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Ikona</th>
+                <th>Naziv</th>
+                <th>Oblast</th>
+                <th>Broj sati</th>
+                <th>Cijena</th>
+                <th>Datum početka</th>
+                <th>Datum završetka</th>
+                <th>Opis</th>
+                <th>@Resource.Akcija</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kurs in Model)
+            {
+                <tr>
+                    <td>
+                        <img alt="Nema slike" src="@SlikaBase64.Prikaz(kurs.Ikona)" height="40" />
+                    </td>
+                    <td>@kurs.Naziv</td>
+                    <td>@kurs.Oblast.Naziv</td>
+                    <td>@kurs.BrojSati</td>
+                    <td>@kurs.Cijena</td>
+                    <td>@kurs.DatumPocetka.ToString("dd.MM.yyyy")</td>
+                    <td>@kurs.DatumZavrsetka.ToString("dd.MM.yyyy")</td>
+                    <td>@kurs.Opis</td>
+                    <td>
+                        <a asp-controller="Kursevi" asp-action="Izmjena" asp-route-id="@kurs.Id" class="btn btn-info btn-sm">Izmijeni</a>
+                        <a asp-controller="Kursevi" asp-action="Izbrisi" asp-route-id="@kurs.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                    </td>
+                </tr>
+
+
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(
+               Model,
+               page => Url.Action("Index", new { page }),
+               new PagedListRenderOptions
+               {
+                   LiElementClasses = new[] { "page-item" },
+                   PageClasses = new[] { "page-link" },
+                   UlElementClasses = new[] { "pagination", "justify-content-center", "mb-0" }
+               })
+}

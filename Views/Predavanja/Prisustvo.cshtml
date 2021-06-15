@@ -1,0 +1,50 @@
+﻿@model PredavanjaDodavanjeIzmjenaViewModel
+
+@{
+    ViewData["Title"] = "Prisustvo";
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Predavanja;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Predavanja" asp-action="SnimiPrisustvo">
+    <input asp-for="Predavanje.Id" type="hidden" />
+
+    <div class="form-group">
+        <table class="table table-bordered table-hover">
+            @for (var i = 0; i < Model.Polaznici.Count; i++)
+            {
+                <tr>
+                    <td style="width:1px">
+                        <label class="control outlined control-checkbox checkbox-primary">
+                            <input type="hidden" asp-for="Polaznici[i].KursKorisnikId" />
+                            <input type="hidden" asp-for="Polaznici[i].Ime" />
+                            <input type="hidden" asp-for="Polaznici[i].Prezime" />
+                            <input type="checkbox" asp-for="Polaznici[i].Prisutan">
+                            <div class="control-indicator"></div>
+                        </label>
+                    </td>
+                    <td>
+                        @Model.Polaznici[i].Ime @Model.Polaznici[i].Prezime
+                    </td>
+                    <td>
+                        <input type="text" asp-for="@Model.Polaznici[i].Napomena" class="form-control" placeholder="Napomena" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

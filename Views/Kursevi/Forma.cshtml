@@ -1,0 +1,65 @@
+﻿@using Courses.ViewModels
+
+@model KursDodajViewModel
+
+@{
+    ViewData["Title"] = "Dodavanje kurseva";
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Kursevi;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-action="Snimi" method="post" enctype="multipart/form-data">
+
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label>Naziv</label>
+        <input asp-for="Naziv" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Ikona</label>
+        <input asp-for="Ikona" type="file" accept="image/*" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Oblast</label>
+        <select asp-for="OblastId" asp-items="Model.OblastStavke" class="form-control">
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Broj Sati</label>
+        <input asp-for="BrojSati" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Cijena</label>
+        <input asp-for="Cijena" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Datum Pocetka</label>
+        <input asp-for="DatumPocetka" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Datum Zavrsetka</label>
+        <input asp-for="DatumZavrsetka" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Opis</label>
+        <textarea asp-for="Opis" class="form-control">
+</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+
+</form>

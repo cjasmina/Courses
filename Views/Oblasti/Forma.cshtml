@@ -1,0 +1,37 @@
+﻿@model Oblast
+
+@{
+    if (Model.Id == 0)
+    {
+        ViewData["Title"] = "Dodavanje oblasti";
+    }
+    else
+    {
+        ViewData["Title"] = "Izmjena oblasti";
+    }
+
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Oblasti;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Oblasti" asp-action="Snimi" method="post">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Naziv">Naziv</label>
+        <input asp-for="Naziv" type="text" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

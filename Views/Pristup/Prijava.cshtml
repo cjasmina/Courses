@@ -1,0 +1,66 @@
+﻿@model PristupPrijavaViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = Resource.Prijava;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet" />
+    <link href="https://cdn.materialdesignicons.com/4.4.95/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="~/plugins/nprogress/nprogress.css" rel="stylesheet" />
+    <link id="sleek-css" rel="stylesheet" href="~/css/sleek.css" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <script src="~/plugins/nprogress/nprogress.js"></script>
+    <partial name="~/Views/Shared/_Favicon.cshtml" />
+</head>
+
+<body class="" id="login-page">
+    <div class="container d-flex flex-column justify-content-between vh-100">
+        <div class="row justify-content-center mt-5">
+            <div class="col-xl-5 col-lg-6 col-md-10">
+                <div class="card">
+                    <div class="card-header login-header">
+                        <div class="app-brand">
+                            <a href="/">
+                                <img src="~/img/logo-mini.svg" height="50" />
+                                <span class="brand-name">@Resource.NazivAplikacije</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body text-center p-5">
+                        <form asp-action="Prijava" method="post">
+                            <div class="row">
+                                <div class="form-group col-md-12 mb-4">
+                                    <input asp-for="KorisnickoIme" type="text" placeholder="@Resource.KorisnickoIme" class="form-control input-lg">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input asp-for="Lozinka" type="password" placeholder="@Resource.Lozinka" class="form-control input-lg">
+                                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-lg btn-primary btn-block">@Resource.Prijava</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright pl-0">
+            <p class="text-center">
+                &copy; 2020 @Resource.NazivAplikacije
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+

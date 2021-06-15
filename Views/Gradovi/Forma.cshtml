@@ -1,0 +1,47 @@
+﻿@model GradoviDodavanjeIzmjenaViewModel
+
+@{
+    if (Model.Grad.Id == 0)
+    {
+        ViewData["Title"] = "Dodavanje grada";
+    }
+    else
+    {
+        ViewData["Title"] = "Izmjena grada";
+    }
+
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Gradovi;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Gradovi" asp-action="Snimi">
+    <input asp-for="Grad.Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Grad.Naziv">Naziv</label>
+        <input asp-for="Grad.Naziv" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Grad.PostanskiBroj">Poštanski broj</label>
+        <input asp-for="Grad.PostanskiBroj" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Grad.DrzavaId">Država</label>
+        <select asp-for="Grad.DrzavaId" asp-items="@(new SelectList(Model.Drzave, "Id", "Naziv"))" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

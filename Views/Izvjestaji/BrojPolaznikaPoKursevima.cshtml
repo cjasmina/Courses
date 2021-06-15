@@ -1,0 +1,34 @@
+﻿@model List<IzvjestajiBrojPolaznikaPoKursuViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Broj polaznika po kursevima</title>
+    <link href="~/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <center>
+        <h3>Broj polaznika po kursevima</h3>
+    </center>
+    <br />
+    <table class="table table-bordered">
+        <tr>
+            <th>Naziv kursa</th>
+            <th>Broj polaznika</th>
+        </tr>
+
+        @foreach (var kurs in Model)
+        {
+            <tr>
+                <td>@kurs.Naziv</td>
+                <td>@kurs.BrojPolaznika</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
+

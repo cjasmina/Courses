@@ -1,0 +1,90 @@
+﻿@model KorisniciDodavanjeIzmjenaViewModel
+
+@{
+    if (Model.Korisnik.Id == 0)
+    {
+        ViewData["Title"] = "Dodavanje edukatora";
+    }
+    else
+    {
+        ViewData["Title"] = "Izmjena edukatora";
+    }
+
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Edukatori;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Korisnici" asp-action="SnimiEdukatora" enctype="multipart/form-data">
+    <input asp-for="Korisnik.Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Korisnik.ProfilnaFotografija">Profilna fotografija</label>
+        <input asp-for="Korisnik.ProfilnaFotografija" type="file" accept="image/*" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Ime">Ime</label>
+        <input asp-for="Korisnik.Ime" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Prezime">Prezime</label>
+        <input asp-for="Korisnik.Prezime" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Email">Email</label>
+        <input asp-for="Korisnik.Email" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.KorisnickoIme">@Resource.KorisnickoIme</label>
+        <input asp-for="Korisnik.KorisnickoIme" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Lozinka">@Resource.Lozinka</label>
+        <input asp-for="Korisnik.Lozinka" type="password" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.GradId">Grad</label>
+        <select asp-for="Korisnik.GradId" asp-items="@(new SelectList(Model.Gradovi, nameof(Grad.Id), nameof(Grad.Naziv)))" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.KursId">Kursevi</label>
+
+
+        <table class="table table-bordered">
+            @for (var i = 0; i < Model.Kursevi.Count; i++)
+            {
+                <tr>
+                    <td style="width:1px">
+                        <label class="control outlined control-checkbox checkbox-primary">
+                            <input type="hidden" asp-for="Kursevi[i].KursId" />
+                            <input type="hidden" asp-for="Kursevi[i].Naziv" />
+                            <input type="checkbox" asp-for="Kursevi[i].Odabran">
+                            <div class="control-indicator"></div>
+                        </label>
+                    </td>
+                    <td>@Model.Kursevi[i].Naziv</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

@@ -1,0 +1,293 @@
+﻿@{
+    NavigacijskiLinkovi navigacijskiLink = NavigacijskiLinkovi.KontrolnaPloca;
+
+    if (ViewData["AktivniLink"] != null)
+    {
+        navigacijskiLink = (NavigacijskiLinkovi)ViewData["AktivniLink"];
+    }
+
+    Korisnik logiraniKorisnik = Context.Session.GetObject<Korisnik>(Konfiguracija.KljucLogiranogKorisnika);
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - @Resource.NazivAplikacije</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500" rel="stylesheet" />
+    <link href="https://cdn.materialdesignicons.com/4.4.95/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="~/plugins/nprogress/nprogress.css" rel="stylesheet" />
+    <link href="~/plugins/jvectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />
+    <link href="~/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/plugins/toastr/toastr.min.css" rel="stylesheet" />
+    <link id="sleek-css" rel="stylesheet" href="~/css/sleek.css" />
+    <link rel="stylesheet" href="~/css/custom.css" />
+    <link href="~/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/plugins/nprogress/nprogress.js"></script>
+    <partial name="_Favicon.cshtml" />
+</head>
+<body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
+    <script>
+        NProgress.configure({ showSpinner: false });
+        NProgress.start();
+    </script>
+
+    <div id="toaster"></div>
+
+    <div class="wrapper">
+        <aside class="left-sidebar bg-sidebar">
+            <div id="sidebar" class="sidebar">
+                <div class="app-brand">
+                    <a href="/" title="@Resource.NazivAplikacije">
+                        <img src="~/img/logo-mini.svg" width="25" />
+                        <span class="brand-name text-truncate">@Resource.NazivAplikacije</span>
+                    </a>
+                </div>
+                <div class="sidebar-scrollbar">
+                    <ul class="nav sidebar-inner" id="sidebar-menu">
+                        <li class="@(navigacijskiLink == NavigacijskiLinkovi.KontrolnaPloca ? "active" : "")">
+                            <a class="sidenav-item-link" asp-controller="Home" asp-action="Index">
+                                <i class="mdi mdi-view-dashboard-outline"></i>
+                                <span class="nav-text">@Resource.KontrolnaPloca</span>
+                            </a>
+                        </li>
+                        @if (Context.ImaPristup(Uloga.Administrator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Drzave ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Drzave" asp-action="Index">
+                                    <i class="mdi mdi-map"></i>
+                                    <span class="nav-text">@Resource.Drzave</span>
+                                </a>
+                            </li>
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Gradovi ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Gradovi" asp-action="Index">
+                                    <i class="mdi mdi-map-marker"></i>
+                                    <span class="nav-text">@Resource.Gradovi</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Administrator, Uloga.Edukator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Obavijesti ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Obavijesti" asp-action="Index">
+                                    <i class="mdi mdi-newspaper"></i>
+                                    <span class="nav-text">@Resource.Obavijesti</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Administrator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.TipoviObavijesti ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="TipoviObavijesti" asp-action="Index">
+                                    <i class="mdi mdi-format-list-bulleted-type"></i>
+                                    <span class="nav-text">@Resource.TipoviObavijesti</span>
+                                </a>
+                            </li>
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Kursevi ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Kursevi" asp-action="Index">
+                                    <i class="mdi mdi-laptop"></i>
+                                    <span class="nav-text">@Resource.Kursevi</span>
+                                </a>
+                            </li>
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Edukatori ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Korisnici" asp-action="Edukatori">
+                                    <i class="mdi mdi-account-multiple"></i>
+                                    <span class="nav-text">@Resource.Edukatori</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Administrator, Uloga.Edukator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Polaznici ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Korisnici" asp-action="Polaznici">
+                                    <i class="mdi mdi-account-multiple"></i>
+                                    <span class="nav-text">@Resource.Polaznici</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Administrator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Oblasti ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Oblasti" asp-action="Index">
+                                    <i class="mdi mdi-vector-intersection"></i>
+                                    <span class="nav-text">@Resource.Oblasti</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Edukator))
+                        {
+                            <li class="@(navigacijskiLink == NavigacijskiLinkovi.Predavanja ? "active" : "")">
+                                <a class="sidenav-item-link" asp-controller="Predavanja" asp-action="Index">
+                                    <i class="mdi mdi-presentation"></i>
+                                    <span class="nav-text">Predavanja</span>
+                                </a>
+                            </li>
+                        }
+                        @if (Context.ImaPristup(Uloga.Administrator))
+                        {
+                            <li class="has-sub">
+                                <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#izvjestaji" aria-expanded="false" aria-controls="izvjestaji">
+                                    <i class="mdi mdi-file-chart"></i>
+                                    <span class="nav-text">Izvještaji</span> <b class="caret"></b>
+                                </a>
+                                <ul class="collapse" id="izvjestaji" data-parent="#sidebar-menu">
+                                    <div class="sub-menu">
+                                        <li>
+                                            <a asp-controller="Izvjestaji" asp-action="BrojPolaznikaPoKursevima" class="sidenav-item-link" target="_blank">
+                                                <span class="nav-text">Broj polaznika po kursevima</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Izvjestaji" asp-action="BrojKursevaPoEdukatorima" class="sidenav-item-link" target="_blank">
+                                                <span class="nav-text">Broj kurseva po edukatorima</span>
+                                            </a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </aside>
+        <div class="page-wrapper">
+            <header class="main-header " id="header">
+                <nav class="navbar navbar-static-top navbar-expand-lg">
+                    <button id="sidebar-toggler" class="sidebar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                    <div class="search-form d-none d-lg-inline-block">
+                    </div>
+                    <div class="navbar-right ">
+                        <ul class="nav navbar-nav">
+                            @*<li class="dropdown notifications-menu">
+                                    <button class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="mdi mdi-bell-outline"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">You have 5 notifications</li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="mdi mdi-account-plus"></i> New user registered
+                                                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="mdi mdi-account-remove"></i> User deleted
+                                                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 07 AM</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="mdi mdi-chart-areaspline"></i> Sales report is ready
+                                                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 12 PM</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="mdi mdi-account-supervisor"></i> New client
+                                                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="mdi mdi-server-network-off"></i> Server overloaded
+                                                <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 05 AM</span>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-footer">
+                                            <a class="text-center" href="#"> View All </a>
+                                        </li>
+                                    </ul>
+                                </li>*@
+                            <li class="dropdown user-menu">
+                                <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    @if (logiraniKorisnik.ProfilnaFotografija != null)
+                                    {
+                                        <img src="@SlikaBase64.Prikaz(logiraniKorisnik.ProfilnaFotografija)" class="user-image" alt="User Image" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/user/u1.jpg" class="user-image" alt="User Image" />
+                                    }
+                                    <span class="d-none d-lg-inline-block">@Resource.Pozdrav, @logiraniKorisnik.Ime</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li class="dropdown-header">
+                                        @if (logiraniKorisnik.ProfilnaFotografija != null)
+                                        {
+                                            <img src="@SlikaBase64.Prikaz(logiraniKorisnik.ProfilnaFotografija)" class="img-circle" alt="User Image" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/img/user/u1.jpg" class="img-circle" alt="User Image" />
+                                        }
+
+                                        <div class="d-inline-block">
+                                            @logiraniKorisnik.Ime @logiraniKorisnik.Prezime <small class="pt-1">@logiraniKorisnik.Email</small>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Pristup" asp-action="Profil">
+                                            <i class="mdi mdi-account-supervisor"></i> @Resource.Profil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-controller="Pristup" asp-action="Odjava">
+                                            <i class="mdi mdi-logout"></i> @Resource.Odjava
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <div class="content-wrapper">
+                <div class="content">
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="footer mt-auto">
+                <div class="copyright bg-white">
+                    <p>
+                        &copy; 2020 @Resource.NazivAplikacije
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/slimscrollbar/jquery.slimscroll.min.js"></script>
+    <script src="~/plugins/jekyll-search.min.js"></script>
+    <script src="~/plugins/charts/Chart.min.js"></script>
+    <script src="~/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
+    <script src="~/plugins/jvectormap/jquery-jvectormap-world-mill.js"></script>
+    <script src="~/plugins/select2/js/select2.min.js"></script>
+    <script src="~/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/plugins/daterangepicker/daterangepicker.js"></script>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('input[name="dateRange"]').daterangepicker({
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+            jQuery('input[name="dateRange"]').on('apply.daterangepicker', function (ev, picker) {
+                jQuery(this).val(picker.startDate.format('MM/DD/YYYY'));
+            });
+            jQuery('input[name="dateRange"]').on('cancel.daterangepicker', function (ev, picker) {
+                jQuery(this).val('');
+            });
+        });
+    </script>
+    <script src="~/js/sleek.bundle.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

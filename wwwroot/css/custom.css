@@ -1,0 +1,49 @@
+﻿.sidebar .sidebar-inner > li > a
+{
+    text-transform: unset;
+}
+
+.card-default .card-body, 
+.card-default .card-header-border-bottom {
+    padding: 1.5rem;
+}
+
+.navbar {
+    padding-right: 1rem;
+}
+
+.user-menu .dropdown-header {
+    padding: 1.25rem !important;
+    margin-bottom: unset !important;
+}
+
+.user-menu .dropdown-footer {
+    margin-top: unset !important;
+}
+
+.content {
+    padding: 1.5rem 2.75rem !important;
+}
+
+.sidebar .sidebar-inner {
+    margin-top: 1.25rem;
+}
+
+body {
+    background-color: #fff !important;
+}
+
+.app-brand, .login-header {
+    background: url('/img/app-brand.jpg') !important;
+    background-size: cover !important;
+}
+
+    .login-header .app-brand {
+        background: unset !important;
+        background-size: unset !important;
+        background-color: unset !important;
+    }
+
+#login-page .card-header {
+    padding: 2.75rem 1.25rem;
+}

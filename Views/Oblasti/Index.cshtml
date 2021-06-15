@@ -1,0 +1,50 @@
+﻿@model List<Oblast>
+
+@{
+    ViewData["Title"] = Resource.Oblasti;
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Oblasti;
+}
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Oblasti" asp-action="Dodavanje" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema oblasti za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Naziv
+                </th>
+                <th class="text-right">
+                    @Resource.Akcija
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var oblast in Model)
+            {
+                <tr>
+                    <td>@oblast.Naziv</td>
+                    <td class="text-right">
+                        <a asp-controller="Oblasti" asp-action="Izmjena" asp-route-id="@oblast.Id" class="btn btn-info btn-sm">Izmijeni</a>
+                        <a asp-controller="Oblasti" asp-action="Izbrisi" asp-route-id="@oblast.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

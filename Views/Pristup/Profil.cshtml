@@ -1,0 +1,61 @@
+﻿@model KorisniciDodavanjeIzmjenaViewModel
+
+@{
+
+        ViewData["Title"] = "Moj profil";
+
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-highlighted">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form asp-controller="Pristup" asp-action="Snimi" enctype="multipart/form-data">
+    <input asp-for="Korisnik.Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Korisnik.ProfilnaFotografija">Profilna fotografija</label>
+        <input asp-for="Korisnik.ProfilnaFotografija" type="file" accept="image/*" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Ime">Ime</label>
+        <input asp-for="Korisnik.Ime" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Prezime">Prezime</label>
+        <input asp-for="Korisnik.Prezime" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Email">Email</label>
+        <input asp-for="Korisnik.Email" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.KorisnickoIme">@Resource.KorisnickoIme</label>
+        <input asp-for="Korisnik.KorisnickoIme" type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.Lozinka">@Resource.Lozinka</label>
+        <input asp-for="Korisnik.Lozinka" type="password" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Korisnik.GradId">Grad</label>
+        <select asp-for="Korisnik.GradId" asp-items="@(new SelectList(Model.Gradovi, nameof(Grad.Id), nameof(Grad.Naziv)))" class="form-control"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spremi</button>
+</form>

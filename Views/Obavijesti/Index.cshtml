@@ -1,0 +1,92 @@
+﻿@model IPagedList<Obavijest>
+
+@{
+    ViewData["Title"] = Resource.Obavijesti;
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Obavijesti;
+}
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Obavijesti" asp-action="Dodavanje" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema obavijesti za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Fotografija
+                </th>
+                @if (Context.ImaPristup(Uloga.Edukator))
+                {
+                    <th>Kurs</th>
+                }
+                <th>
+                    Tip obavijesti
+                </th>
+                <th>
+                    Naziv
+                </th>
+                <th>
+                    Datum objave
+                </th>
+                <th>
+                    Datum ažuriranja
+                </th>
+
+                <th class="text-right">
+                    @Resource.Akcija
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obavijest in Model)
+            {
+                <tr>
+                    <td><img src="@SlikaBase64.Prikaz(obavijest.NaslovnaFotografija)" height="60" /></td>
+                    @if (Context.ImaPristup(Uloga.Edukator))
+                    {
+                        <td>@obavijest.Kurs.Naziv</td>
+                    }
+                    <td>@obavijest.TipObavijesti.Naziv</td>
+                    <td>@obavijest.Naziv</td>
+                    <td>@obavijest.DatumObjave.ToString("dd.MM.yyyy")</td>
+                    <td>@obavijest.DatumAzuriranja.ToString("dd.MM.yyyy")</td>
+                    <td class="text-right">
+                        @if (obavijest.Dodatak != null)
+                        {
+                            <a asp-controller="Obavijesti" asp-action="Dodatak" asp-route-id="@obavijest.Id" class="btn btn-info btn-sm">Dodatak</a>
+                        }
+
+                        <a asp-controller="Obavijesti" asp-action="Izmjena" asp-route-id="@obavijest.Id" class="btn btn-info btn-sm">Izmijeni</a>
+
+                        <a asp-controller="Obavijesti" asp-action="Izbrisi" asp-route-id="@obavijest.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("Index", new { page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination", "justify-content-center", "mb-0" }
+        }
+    )
+}

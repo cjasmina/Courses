@@ -1,0 +1,82 @@
+﻿@model IPagedList<Predavanje>
+
+@{
+    ViewData["Title"] = "Predavanja";
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Predavanja;
+}
+
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Predavanja" asp-action="Dodavanje" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema predavanja za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Naziv
+                </th>
+                <th>
+                    Opis
+                </th>
+                <th>
+                    Datum
+                </th>
+                <th>
+                    Kurs
+                </th>
+                <th>
+                    Broj prisutnih
+                </th>             
+                <th class="text-right">
+                    @Resource.Akcija
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var predavanje in Model)
+            {
+                <tr>
+            
+                    <td>@predavanje.Naziv</td>
+                    <td>@predavanje.Opis</td>
+                    <td>@predavanje.DatumPredavanja.ToString("dd.MM.yyyy")</td>
+                    <td>@predavanje.Kurs.Naziv</td>
+                    <td>
+                        @predavanje.Prisustva.Count(x => x.Prisutan) / @predavanje.Prisustva.Count()
+                    </td>
+                    <td class="text-right">
+                        <a asp-controller="Predavanja" asp-action="Izmjena" asp-route-id="@predavanje.Id" class="btn btn-info btn-sm">Izmijeni</a>
+                        <a asp-controller="Predavanja" asp-action="Prisustvo" asp-route-id="@predavanje.Id" class="btn btn-info btn-sm">Prisustvo</a>
+                        <a asp-controller="Predavanja" asp-action="Izbrisi" asp-route-id="@predavanje.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("Index", new { page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination", "justify-content-center", "mb-0" }
+        }
+    )
+}

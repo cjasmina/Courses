@@ -1,0 +1,59 @@
+﻿@model List<Grad>
+
+@{
+    ViewData["Title"] = Resource.Gradovi;
+    ViewData["AktivniLink"] = NavigacijskiLinkovi.Gradovi;
+}
+<flash dismissable="true" />
+
+<div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div>
+        <a asp-controller="Gradovi" asp-action="Dodavanje" class="btn btn-primary">@Resource.Dodaj</a>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info alert-highlighted clearfix">
+        <span>Nema gradova za prikaz.</span>
+    </div>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Naziv
+                </th>
+                <th>
+                    Poštanski broj
+                </th>
+                <th>
+                    Naziv države
+                </th>
+                <th class="text-right">
+                    @Resource.Akcija
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grad in Model)
+            {
+                <tr>
+                    <td>@grad.Naziv</td>
+                    <td>@grad.PostanskiBroj</td>
+                    <td>@grad.Drzava.Naziv</td>
+
+                    <td class="text-right">
+                        <a asp-controller="Gradovi" asp-action="Izmjena" asp-route-id="@grad.Id" class="btn btn-info btn-sm">Izmijeni</a>
+                        <a asp-controller="Gradovi" asp-action="Izbrisi" asp-route-id="@grad.Id" class="btn btn-danger btn-sm">Izbriši</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
